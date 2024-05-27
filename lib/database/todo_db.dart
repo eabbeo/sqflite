@@ -5,22 +5,20 @@ import 'package:sqflite/sqflite.dart';
 class TodoDB {
   final tableName = 'todos';
 
-  Future<void> createTable(Database databse) async {
-    await databse.execute(""" CREATE TABLE IF NOT EXIST $tableName (
-      "id" INTERGER NOT NULL,
-      "title" TEXT NOT NULL,
-      "create_at" INTEGER NOT NULL DEFAULT (cast(strftime('%s','now') as integer),
-      "updated_at" INTEGER,
-      PRIMARY KEY ("id" AUTOINCREMENT)
-      )
-    );""");
+  Future<void> createTable(Database database) async {
+    await database.execute('''CREATE TABLE IF NOT EXISTS $tableName (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "title" TEXT NOT NULL,
+    "created_at" INTEGER NOT NULL DEFAULT (cast(strftime('%s','now') as integer)),
+    "updated_at" INTEGER
+  );''');
   }
 
   //INSERTING DATA IN A TABLE
   Future<int> create({required String title}) async {
     final database = await DatabaseService().database;
     return await database.rawInsert(
-        ''' INSERT INTO $tableName (title,created_at) VALUES (?,?)''',
+        '''INSERT INTO $tableName (title,created_at) VALUES (?,?)''',
         [title, DateTime.now().millisecondsSinceEpoch]);
   }
 
@@ -47,7 +45,7 @@ class TodoDB {
         tableName,
         {
           if (title != null) 'title': title,
-          'update_at': DateTime.now().millisecondsSinceEpoch,
+          'updated_at': DateTime.now().millisecondsSinceEpoch,
         },
         where: 'id = ?',
         conflictAlgorithm: ConflictAlgorithm.rollback,

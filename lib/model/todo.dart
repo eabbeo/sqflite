@@ -14,8 +14,8 @@ class Todo {
       id: map['id']?.toInt() ?? 0,
       title: map['title'] ?? '',
       createAt:
-          DateTime.fromMillisecondsSinceEpoch(map['ccreated_at']).toString(),
-      updatedAt: map['update_at'] == null
+          DateTime.fromMillisecondsSinceEpoch(map['created_at']).toString(),
+      updatedAt: map['updated_at'] == null
           ? null
-          : DateTime.fromMillisecondsSinceEpoch(map['update_at']).toString());
+          : DateTime.fromMillisecondsSinceEpoch(map['updated_at']).toString());
 }
